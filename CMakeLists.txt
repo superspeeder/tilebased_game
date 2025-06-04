@@ -13,7 +13,8 @@ set(SPDLOG_USE_STD_FORMAT ON)
 
 FetchContent_MakeAvailable(glm spdlog glfw VulkanHeaders)
 
-add_executable(tilegame src/game/game.cpp src/game/window.cpp src/game/render.cpp)
+add_executable(tilegame src/game/game.cpp src/game/window.cpp src/game/render.cpp
+        src/game/utils.hpp)
 target_include_directories(tilegame PRIVATE src/)
 target_link_libraries(tilegame PRIVATE glm::glm spdlog::spdlog glfw Vulkan::Headers) 
 target_compile_definitions(tilegame PRIVATE GLM_ENABLE_EXPERIMENTAL GLFW_INCLUDE_NONE GLFW_INCLUDE_VULKAN)
