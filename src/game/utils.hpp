@@ -9,13 +9,14 @@
 #include <functional>
 
 namespace game {
+    template<typename T, std::size_t...Is>
+    std::array<T, sizeof...(Is)> array_from_fn(const std::function<T(std::size_t)> &f, std::index_sequence<Is...>) {
+        return { ((void)Is, f(Is))... };
+    }
+
+
     template<typename T, std::size_t N>
     std::array<T, N> array_from_fn(const std::function<T(std::size_t)> &f) {
-        T *arr = new T[N];
-        for (std::size_t i = 0 ; i < N ; ++i) {
-            arr[i] = f(i);
-        }
-///https://stackoverflow.com/questions/46899731/initializing-an-stdarray-of-non-default-constructible-elements
-        return std::make_index_sequence<>);
+        return array_from_fn<T>(f, std::make_index_sequence<N>());
     }
 }

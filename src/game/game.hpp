@@ -3,7 +3,8 @@
 #include <GLFW/glfw3.h>
 #include <memory>
 
-#include "game/render.hpp"
+#include "game/render/render_system.hpp"
+#include "game/render/frame_manager.hpp"
 #include "game/window.hpp"
 
 namespace game {
@@ -36,9 +37,13 @@ namespace game {
         Game();
         ~Game();
 
+        void frame();
         void run();
 
-        void render(const vk::raii::CommandBuffer& cmd, const FrameResources& frameResources, const ImageResources& imageResources, const ImageProperties& imageProperties, const vk::Image image);
+        void render(
+            const vk::raii::CommandBuffer &cmd, const FrameResources &frameResources, const ImageResources &imageResources, const ImageProperties &imageProperties,
+            const vk::Image image
+        );
 
       private:
         libload                                                       _libload{};
