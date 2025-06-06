@@ -38,6 +38,7 @@ add_executable(tilegame src/game/game.cpp src/game/window.cpp
         src/game/render/shader_object.hpp
         src/game/asset/asset.cpp
         src/game/asset/asset.hpp
+        src/game/asset/asset_loader.hpp
 )
 target_include_directories(tilegame PRIVATE src/)
 target_link_libraries(tilegame PRIVATE glm::glm spdlog::spdlog glfw Vulkan::Headers GPUOpen::VulkanMemoryAllocator)

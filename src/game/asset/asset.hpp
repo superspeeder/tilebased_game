@@ -17,21 +17,21 @@ namespace game {
 #endif
 
 #ifndef ASSETS_MAX_REFERENCES
-#define ASSETS_MAX_REFERENCES 4294967295
+#define ASSETS_MAX_REFERENCES 4294967295U
 #endif
 
-#if ASSETS_MAX_REFERENCES <= 255
+#if ASSETS_MAX_REFERENCES <= 255U
     using asset_rc_t = std::atomic_uint8_t;
-#elif ASSETS_MAX_REFERENCES <= 65535
+#elif ASSETS_MAX_REFERENCES <= 65535U
     using asset_rc_t = std::atomic_uint16_t;
-#elif ASSETS_MAX_REFERENCES <= 4294967295
+#elif ASSETS_MAX_REFERENCES <= 4294967295U
     using asset_rc_t = std::atomic_uint32_t;
 #else
     using asset_rc_t = std::atomic_uint64_t;
 #endif
 
 #ifdef ASSETS_REFCOUNT_BOUNDS_CHECKS
-#if ASSETS_MAX_REFERENCES == 18446744073709551615 || ASSETS_MAX_REFERENCES == 4294967295 || ASSETS_MAX_REFERENCES == 65535 || ASSETS_MAX_REFERENCES == 255
+#if ASSETS_MAX_REFERENCES == 18446744073709551615U || ASSETS_MAX_REFERENCES == 4294967295U || ASSETS_MAX_REFERENCES == 65535U || ASSETS_MAX_REFERENCES == 255U
     // max references is equal to the max of an unsigned type, so passing increment bounds **will** overflow
 #define ASSET_OVERFLOW_WARNING " (results in integer overflow, expect broken state)"
 #else
@@ -68,10 +68,10 @@ namespace game {
         asset_rc_t m_RefCount;
     };
 
-    template <std::derived_from<AssetBase> T>
+    template <typename T>
     struct AssetHandle;
 
-    template <std::derived_from<AssetBase> T>
+    template <typename T>
     class Asset : public AssetBase {
       public:
         using handle_t = AssetHandle<T>;
@@ -87,14 +87,15 @@ namespace game {
         friend weak_t;
     };
 
-    template <typename T>
-        requires std::derived_from<T, Asset<T>>
+    template<typename T>
+    concept asset_type = std::derived_from<T, Asset<T>>;
+
+    template <asset_type T>
     struct AssetHandle<T> {
         asset_id_t id;
     };
 
-    template <typename T>
-        requires std::derived_from<T, Asset<T>>
+    template <asset_type T>
     class AssetReference<T> {
       public:
         // ReSharper disable CppNonExplicitConvertingConstructor
@@ -121,8 +122,7 @@ namespace game {
         T *m_Asset;
     };
 
-    template <typename T>
-        requires std::derived_from<T, Asset<T>>
+    template <asset_type T>
     class AssetWeak<T> {
       public:
         // ReSharper disable CppNonExplicitConvertingConstructor

@@ -6,7 +6,7 @@
 
 namespace game {
     Shader::Shader(const std::shared_ptr<RenderDevice> &renderDevice, const std::vector<vk::ShaderCreateInfoEXT> &createInfos)
-        : m_Shaders(renderDevice->device(), createInfos) {
+        : Asset<Shader>(0), m_Shaders(renderDevice->device(), createInfos) {
     }
 
     void Shader::bind(const vk::raii::CommandBuffer &cmd) const {

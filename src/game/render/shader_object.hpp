@@ -4,13 +4,15 @@
 
 #pragma once
 
+#include "game/asset/asset.hpp"
 #include "game/render/render_device.hpp"
 
 namespace game {
 
-    class Shader {
+    class Shader : public Asset<Shader> {
       public:
         Shader(const std::shared_ptr<RenderDevice>& renderDevice, const std::vector<vk::ShaderCreateInfoEXT> &createInfos);
+        // TODO: asset loading constructor.
 
         [[nodiscard]] inline bool isLinked() const noexcept { return m_IsLinked; }
 
