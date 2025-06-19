@@ -9,6 +9,10 @@
 #include <iostream>
 #include <string>
 
+#ifndef NDEBUG
+#include <cassert>
+#endif
+
 namespace game {
 #ifdef ASSETS_64BIT_ID
     /**
@@ -71,7 +75,6 @@ namespace game {
 #define ASSET_OVERFLOW_WARNING
 #endif
 
-#include <cassert>
 #define asset_rc_assert_inc(s) assert((s < (ASSETS_MAX_REFERENCES)) && ("Cannot increment reference counter: Too many references to asset" ASSET_OVERFLOW_WARNING))
 #define asset_rc_assert_dec(s) assert((s > 0) && ("Cannot decrement reference counter: No existing references to asset (will cause integer underflow, expect broken state)"))
 #else

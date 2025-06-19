@@ -10,7 +10,7 @@
 #include "spdlog/spdlog.h"
 
 namespace game {
-    AssetManager::AssetManager(const std::shared_ptr<RenderSystem> &renderSystem) : m_CycleSemaphore(0), m_RenderSystem(renderSystem) {
+    AssetManager::AssetManager(const std::shared_ptr<RenderSystem> &renderSystem) : m_CycleSemaphore(0), m_RenderSystem(renderSystem), m_Context{m_RenderSystem, this} {
         populateLoaders();
     }
 

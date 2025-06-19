@@ -121,7 +121,7 @@ namespace game {
         std::atomic_flag      m_DeletionWaitingFlag;
 
         std::shared_ptr<RenderSystem> m_RenderSystem;
-        AssetLoaderContext            m_Context{m_RenderSystem, this};
+        AssetLoaderContext            m_Context;
 
         void deletionThread(std::stop_token);
     };

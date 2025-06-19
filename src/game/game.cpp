@@ -24,7 +24,7 @@ namespace game {
         m_Bundle = m_AssetManager->loadFromFile<AssetBundleLoader>("simple_bundle.json");
 
         m_Shader         = m_AssetManager->get<Shader>("shaders/sample_linked_shader.json");
-        m_PipelineLayout = m_AssetManager->get<PipelineLayout>("shaders/sample_pipeline_layout.json");
+        m_PipelineLayout = m_AssetManager->get<PipelineLayout>("render/sample_pipeline_layout.json");
 
         glfwSetWindowUserPointer(m_Window->window(), this);
 
@@ -63,8 +63,8 @@ namespace game {
 
             if (frames < 20000) {
                 if (++frames == 20000) {
-                    m_UnlinkedShaderFrag.reset();
-                    m_UnlinkedShaderVert.reset();
+//                    m_UnlinkedShaderFrag.reset();
+//                    m_UnlinkedShaderVert.reset();
                     std::cout << "trigger" << std::endl;
                 }
             }

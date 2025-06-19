@@ -12,6 +12,8 @@
 #include <typeindex>
 
 namespace game {
+    class AssetManager;
+
     /**
      * @brief Context data passed to every asset load.
      */
@@ -33,8 +35,10 @@ namespace game {
          * @return The binary contents of that asset file.
          */
         static inline std::vector<unsigned char> readFile(const std::filesystem::path &path) {
-            std::ifstream file("assets" / path, std::ios::binary | std::ios::ate);
-            if (file.bad()) {
+            const auto fullPath = "assets" / path;
+            if (!std::filesystem::exists(fullPath)) throw std::invalid_argument("File '" + fullPath.string() + "' does not exist");
+            std::ifstream file(fullPath, std::ios::in | std::ios::binary | std::ios::ate);
+            if (!file.rdstate() == std::ios_base::goodbit) {
                 throw std::invalid_argument("Couldn't open file: " + path.string());
             }
 

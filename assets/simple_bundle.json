@@ -1,5 +1,9 @@
 {
-  "asset_bundle": [
+  "linked_shader": [
     "shaders/sample_linked_shader.json"
+  ],
+  "pipeline_layout": [
+    "render/sample_pipeline_layout.json"
   ]
 }
+
