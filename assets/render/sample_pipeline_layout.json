@@ -1,0 +1,9 @@
+{
+  "push_constant_ranges": [
+    {
+      "stages": ["vertex", "fragment"],
+      "offset": 0,
+      "size": 12
+    }
+  ]
+}

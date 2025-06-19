@@ -14,10 +14,11 @@ FetchContent_Declare(spdlog GIT_REPOSITORY https://github.com/gabime/spdlog.git 
 FetchContent_Declare(glfw GIT_REPOSITORY https://github.com/glfw/glfw.git GIT_TAG 3.4)
 FetchContent_Declare(VulkanHeaders GIT_REPOSITORY https://github.com/KhronosGroup/Vulkan-Headers.git GIT_TAG v1.4.316)
 FetchContent_Declare(vma GIT_REPOSITORY https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator.git GIT_TAG v3.3.0)
+FetchContent_Declare(nlohmann_json GIT_REPOSITORY https://github.com/nlohmann/json.git GIT_TAG v3.12.0)
 
 set(SPDLOG_USE_STD_FORMAT ON)
 
-FetchContent_MakeAvailable(glm spdlog glfw VulkanHeaders vma)
+FetchContent_MakeAvailable(glm spdlog glfw VulkanHeaders vma nlohmann_json)
 
 add_executable(tilegame src/game/game.cpp src/game/window.cpp
         src/game/utils.hpp
@@ -39,9 +40,18 @@ add_executable(tilegame src/game/game.cpp src/game/window.cpp
         src/game/asset/asset.cpp
         src/game/asset/asset.hpp
         src/game/asset/asset_loader.hpp
+        src/game/asset/asset_loader.cpp
+        src/game/asset/asset_manager.cpp
+        src/game/asset/asset_manager.hpp
+        src/game/render/pipeline_layout.cpp
+        src/game/render/pipeline_layout.hpp
+        src/game/asset/common_parse.hpp
+        src/game/asset/common_parse.cpp
+        src/game/asset/asset_bundle.cpp
+        src/game/asset/asset_bundle.hpp
 )
 target_include_directories(tilegame PRIVATE src/)
-target_link_libraries(tilegame PRIVATE glm::glm spdlog::spdlog glfw Vulkan::Headers GPUOpen::VulkanMemoryAllocator)
+target_link_libraries(tilegame PRIVATE glm::glm spdlog::spdlog glfw Vulkan::Headers GPUOpen::VulkanMemoryAllocator nlohmann_json::nlohmann_json)
 target_compile_definitions(tilegame PRIVATE GLM_ENABLE_EXPERIMENTAL GLFW_INCLUDE_NONE GLFW_INCLUDE_VULKAN)
 
 if (ASSETS_REFCOUNT_BOUNDS_CHECKS)

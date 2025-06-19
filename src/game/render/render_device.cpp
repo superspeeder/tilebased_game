@@ -75,7 +75,6 @@ namespace game {
             vulkan13Features.synchronization2   = true;
             vulkan13Features.maintenance4       = true;
 
-
             vk::PhysicalDeviceShaderObjectFeaturesEXT shaderObjectFeatures{};
             shaderObjectFeatures.shaderObject = true;
 

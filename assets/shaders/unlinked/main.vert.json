@@ -1,0 +1,14 @@
+{
+  "file": "shaders/main.vert.spv",
+  "stage": "vertex",
+  "next": ["fragment"],
+  "entry": "main",
+  "push_constant_ranges": [
+    {
+      "stages": ["vertex", "fragment"],
+      "offset": 0,
+      "size": 12
+    }
+  ],
+  "descriptor_set_layouts": []
+}

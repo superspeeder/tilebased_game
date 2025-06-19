@@ -17,4 +17,5 @@ NamespaceIndentation: All
 AllowShortFunctionsOnASingleLine: Inline
 CompactNamespaces: true
 PenaltyBreakAssignment: 160
+PenaltyReturnTypeOnItsOwnLine: 260
 AlignAfterOpenBracket: BlockIndent
