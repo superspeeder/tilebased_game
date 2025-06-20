@@ -1,0 +1,31 @@
+{
+    "type": "vertex_layout",
+    "bindings": [
+        {
+            "kind": "packed-sequential",
+            "attributes": [
+                {
+                    "type": "float32",
+                    "components": 4,
+                    "kind": "position"
+                },
+                {
+                    "type": "float32",
+                    "components": 4,
+                    "kind": "color"
+                },
+                {
+                    "type": "float32",
+                    "components": 4,
+                    "kind": "normal"
+                },
+                {
+                    "type": "float32",
+                    "components": 2,
+                    "kind": "texture-coords"
+                }
+            ]
+        }
+    ]
+}
+

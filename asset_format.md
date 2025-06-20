@@ -75,4 +75,22 @@ Asset packs also can reduce overhead by reducing the number of system interrupts
 > Later, I will add the asset database (and likely write a python tool for building asset databases and asset packs)
 
 
+# Asset Metadata
+(Originally unplanned and not yet implemented) All assets will have some way to store metadata like unique name (default to path), static id (default to none), and loader (required).
+This will allow me to update game content without having to recompile everything.
 
+This will work by making all assets which are stored in an external format loaded using an asset loader derived from one of the multifile loaders (either the base multifile loader which allows for several files if that is necessary, or the more specialized file+json loader).
+
+A generic loader will be used for initial asset loading, which will then get and pass off to the correct asset loader.
+
+## Loading
+Assets can be loaded either by source name (for file+meta assets this might make more sense, especially since the loader will set the name to the source path by default, not the meta path) or by metadata file (which will always work).
+The underlying logic will check if there is a meta file for the asset you are trying to load, and if there is it'll load from that. Otherwise it'll treat the file you are asking it to load as if it's a metadata file. You will recieve an error if the file deduced to be metadata fails to load.
+
+
+# A weird note about the asset implementation
+The asset loading system supports a user-provided options field, however this is currently unused.
+
+This options type will likely remain as `std::nullptr_t` for standard usage. The main purpose is to allow for certain kinds of loaders to work (for example, you might use this if you have a shader embedded in the executable so you can provide the correct information).
+
+The current asset manager system does not allow registered loaders with options types other than `std::nullptr_t`, however you can tell it to load non-generic in order to get the desired logic.

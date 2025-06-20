@@ -14,6 +14,12 @@
 namespace game {
     class AssetManager;
 
+    std::filesystem::path assetDir();
+
+    inline std::filesystem::path assetPath(const std::filesystem::path& path) {
+        return assetDir() / path;
+    };
+
     /**
      * @brief Context data passed to every asset load.
      */
@@ -29,19 +35,24 @@ namespace game {
      * @brief Namespace containing asset utility functions which aren't meant for non-asset use
      */
     namespace asset_util {
+        static inline std::ifstream openFile(const std::filesystem::path &path) {
+            const auto fullPath = assetPath(path);
+            if (!std::filesystem::exists(fullPath)) throw std::invalid_argument("File '" + fullPath.string() + "' does not exist");
+            std::ifstream file(fullPath, std::ios::in | std::ios::binary | std::ios::ate);
+            if (file.rdstate() != std::ios_base::goodbit) {
+                throw std::invalid_argument("Couldn't open file: " + path.string());
+            }
+            return file;
+            
+        }
+
         /**
          * @brief Read a file for asset loading.
          * @param path The path to the asset file (relative to the assets directory)
          * @return The binary contents of that asset file.
          */
         static inline std::vector<unsigned char> readFile(const std::filesystem::path &path) {
-            const auto fullPath = "assets" / path;
-            if (!std::filesystem::exists(fullPath)) throw std::invalid_argument("File '" + fullPath.string() + "' does not exist");
-            std::ifstream file(fullPath, std::ios::in | std::ios::binary | std::ios::ate);
-            if (!file.rdstate() == std::ios_base::goodbit) {
-                throw std::invalid_argument("Couldn't open file: " + path.string());
-            }
-
+            auto file = openFile(path);
             const std::streamsize size = file.tellg();
             file.seekg(0, std::ios::beg);
             std::vector<unsigned char> buffer(size);
@@ -50,6 +61,7 @@ namespace game {
 
             return buffer;
         }
+
     } // namespace asset_util
 
     template <typename O>
@@ -271,9 +283,19 @@ namespace game {
         ) const = 0;
     };
 
+    /**
+     * @brief A simple asset loader for single json file assets
+     * @tparam T The type of the loaded asset
+     * @tparam O The load-time user provided options type
+     */
     template <asset_type T, typename O>
     class JsonAssetLoader : public AssetLoader<T, O> {
       public:
+        /**
+         * @brief Override this for asset loading logic
+         *
+         * This is called by this classes implementation of the generic load function.
+         */
         virtual T *load(const nlohmann::json &json, const O &options, asset_id_t id, const std::string &name, const AssetLoaderContext &loaderContext) const = 0;
 
         T *load(
@@ -284,4 +306,43 @@ namespace game {
         }
     };
 
+    /**
+     * @brief Generic data that is grabbed from asset metadata files
+     */
+    struct GenericAssetData {
+        /**
+         * @brief The name of the asset type (used to grab the loader). Required
+         */
+        std::string assetType;
+
+        /**
+         * @brief The name of the asset (if not present, the path relative to the asset directory will be used).
+         */
+        std::string assetName;
+
+        /**
+         * @brief For assets which are a source file + metadata, this lets you override the default source file.
+         *
+         * If not specified, the metadata file is source_filename.json
+         */
+        std::optional<std::string> fileOverride; // only used by assets which are AssetPlusMetadata types
+        
+        /**
+         * @brief Static id values set by assets.
+         *
+         * If not required, the standard asset id provider for the loading context will be used.
+         */
+        std::optional<asset_id_t> staticId;
+    };
+
+    /**
+     * Load an asset from a file in a generic way.
+     *
+     * This will read the metadata and use it to finish loading the asset.
+     *
+     * All assets are assumed to take the metadata file as the load parameter (likely this will trigger json being parsed twice. In the future that should be fixed, probably by restructuring the asset system to fit the new standards I'm setting about metadata).
+     */
+    AssetBase* loadAssetFromFileGeneric(const std::string& path, const AssetLoaderContext& loaderContext);
+
 } // namespace game
+

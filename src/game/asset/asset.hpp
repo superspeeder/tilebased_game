@@ -24,6 +24,7 @@ namespace game {
      * @brief The type of the asset counter
      */
     using asset_counter_t = std::atomic_uint64_t;
+    constexpr asset_id_t STATIC_ID_DOMAIN = 0xFFFF << 48;
 #else
     /**
      * @brief The type of an asset id
@@ -34,6 +35,8 @@ namespace game {
      * @brief The type of the asset counter
      */
     using asset_counter_t = std::atomic_uint32_t;
+
+    constexpr asset_id_t STATIC_ID_DOMAIN = 0xFF << 24;
 #endif
 
     /**
